@@ -1,0 +1,42 @@
+#region VEXcode Generated Robot Configuration
+import math
+import random
+from vexcode_vr import *
+
+# Brain should be defined by default
+brain=Brain()
+
+drivetrain = Drivetrain("drivetrain", 0)
+pen = Pen("pen", 8)
+pen.set_pen_width(THIN)
+left_bumper = Bumper("leftBumper", 2)
+right_bumper = Bumper("rightBumper", 3)
+front_eye = EyeSensor("frontEye", 4)
+down_eye = EyeSensor("downEye", 5)
+front_distance = Distance("frontdistance", 6)
+distance = front_distance
+magnet = Electromagnet("magnet", 7)
+location = Location("location", 9)
+
+#endregion VEXcode Generated Robot Configuration
+myVariable = 0
+
+def when_started1():
+    global myVariable
+    drivetrain.set_drive_velocity(100, PERCENT)
+    drivetrain.set_turn_velocity(100, PERCENT)
+    while True:
+        while not down_eye.detect(RED):
+            if front_distance.found_object() or left_bumper.pressed():
+                drivetrain.drive(FORWARD)
+                if left_bumper.pressed():
+                    drivetrain.turn(LEFT)
+            else:
+                drivetrain.turn(RIGHT)
+            wait(5, MSEC)
+        drivetrain.drive_for(FORWARD, 80, MM)
+        drivetrain.drive_for(REVERSE, 200, MM)
+        drivetrain.turn_for(RIGHT, random.randint(25, 75), DEGREES)
+        wait(5, MSEC)
+
+vr_thread(when_started1)
